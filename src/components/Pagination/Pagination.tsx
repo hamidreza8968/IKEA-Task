@@ -1,16 +1,14 @@
-import React from 'react';
+import { PaginationProps } from '../../interfaces/IPagination.ts';
+import './Pagination.css';
+import LeftArrow from '../icons/LeftArrow/LeftArrow.tsx';
+import RightArrow from '../icons/RightArrow/RightArrow.tsx';
+import Button from "../ui/Button/Button.tsx";
 
-interface PaginationProps {
-    currentPage: number;
-    totalPages: number;
-    onPageChange: (page: number) => void;
-}
-
-const Pagination: React.FC<PaginationProps> = ({
+const Pagination = ({
                                                    currentPage,
                                                    totalPages,
                                                    onPageChange,
-                                               }) => {
+                                               } : PaginationProps) => {
     const handlePrev = () => {
         if (currentPage > 1) onPageChange(currentPage - 1);
     };
@@ -21,15 +19,15 @@ const Pagination: React.FC<PaginationProps> = ({
 
     return (
         <div className="pagination">
-            <button onClick={handlePrev} disabled={currentPage === 1}>
-                Prev
-            </button>
+            <Button onClick={handlePrev} disabled={currentPage === 1}>
+                <LeftArrow size={18} style={{ marginRight: 8 }} /> Prev
+            </Button>
             <span>
         {currentPage} / {totalPages}
       </span>
-            <button onClick={handleNext} disabled={currentPage === totalPages}>
-                Next
-            </button>
+            <Button onClick={handleNext} disabled={currentPage === totalPages}>
+                Next <RightArrow size={18} style={{ marginLeft: 8 }} />
+            </Button>
         </div>
     );
 };

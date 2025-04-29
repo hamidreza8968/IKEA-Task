@@ -1,41 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { useProducts } from '../hooks/useProducts';
 import ProductList from '../components/ProductList/ProductList';
 import Pagination from '../components/Pagination/Pagination';
-import '../styles/styles.css';
+import Input from '../components/ui/Input/Input';
+import '../styles/global.css';
+import './HomePage.css';
+import Spinner from "../components/ui/Spinner/Spinner";
 
-interface Product {
-    id: number;
-    title: string;
-    price: number;
-    description: string;
-    category: string;
-    image: string;
-}
-
-const Home: React.FC = () => {
-    const [products, setProducts] = useState<Product[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string>('');
+const HomePage = () => {
+    const { data: products = [], isLoading, isError, error } = useProducts();
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
     const itemsPerPage = 6;
-
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const response = await fetch('https://fakestoreapi.com/products');
-                if (!response.ok) throw new Error('Failed to fetch products');
-                const data = await response.json();
-                setProducts(data);
-            } catch (err) {
-                setError((err as Error).message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchProducts();
-    }, []);
 
     const filteredProducts = products.filter((product) =>
         product.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -49,21 +25,20 @@ const Home: React.FC = () => {
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value);
-        setCurrentPage(1); // Reset to first page on search
+        setCurrentPage(1);
     };
 
-    if (loading) return <div className="loading">Loading products...</div>;
-    if (error) return <div className="error">{error}</div>;
+    if (isLoading) return <Spinner />;
+    if (isError) return <div className="error">{(error as Error).message}</div>;
 
     return (
         <div className="container">
             <h1>Product Store</h1>
-            <input
+            <Input
                 type="text"
                 placeholder="Search products..."
                 value={searchTerm}
                 onChange={handleSearch}
-                className="search-input"
             />
             <ProductList products={displayedProducts} />
             <Pagination
@@ -75,4 +50,4 @@ const Home: React.FC = () => {
     );
 };
 
-export default Home;
+export default HomePage;

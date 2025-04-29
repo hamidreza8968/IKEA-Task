@@ -1,25 +1,12 @@
-import React from 'react';
+import { ProductListProps } from '../../interfaces/IProduct.ts';
+import './ProductList.css';
+import ProductItem from "../ProductItem/ProductItem.tsx";
 
-interface Product {
-    id: number;
-    title: string;
-    price: number;
-    image: string;
-}
-
-interface ProductListProps {
-    products: Product[];
-}
-
-const ProductList: React.FC<ProductListProps> = ({ products }) => {
+const ProductList= ({ products } : ProductListProps) => {
     return (
         <div className="product-grid">
             {products.map((product) => (
-                <div key={product.id} className="product-card">
-                    <img src={product.image} alt={product.title} />
-                    <h3>{product.title}</h3>
-                    <p>${product.price.toFixed(2)}</p>
-                </div>
+                <ProductItem key={product.id} product={product} />
             ))}
         </div>
     );

@@ -1,11 +1,16 @@
-import Home from './pages/HomePage.tsx';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import HomePage from './pages/HomePage.tsx';
 
-function App() {
+const queryClient = new QueryClient();
+
+const App = () => {
     return (
-        <div>
-            <Home />
-        </div>
+        <QueryClientProvider client={queryClient}>
+            <div>
+                <HomePage />
+            </div>
+        </QueryClientProvider>
     );
-}
+};
 
 export default App;
